@@ -8,6 +8,7 @@ import sklearn.linear_model
 from sklearn.model_selection import train_test_split
 
 import sys
+sys.path.append('.')
 sys.path.append('./..')
 
 # Import the MLflow utils we created earlier
