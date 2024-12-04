@@ -46,7 +46,7 @@ create_dev_env() {
     fi
 
     echo -e "${GREEN}Creating Python $python_version development container...${NC}"
-    docker compose up -d ml_dev_py$python_version
+    docker compose up -d ml_dev_py
 }
 
 # List running containers

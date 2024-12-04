@@ -45,8 +45,8 @@ services:
       dockerfile: dockerfile
       args:
         - PYTHON_VERSION=3.9.18
-    container_name: ml_dev_py39
-    image: ml_dev_py39
+    container_name: ml_dev_py
+    image: ml_dev_py
 
 volumes:
   mlflow_data:
