@@ -46,7 +46,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && rm get-pip.py
 
 # Set working directory
-WORKDIR /workspace
+WORKDIR /default_workspace
 
 # Copy requirements and install
 COPY rrequirements.txt /default_workspace/requirements.txt
