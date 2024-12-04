@@ -19,7 +19,7 @@ chmod +x docker/commands.sh
 
 ```shell
 # Build containers
-docker-compose build
+docker compose build
 ```
 
 Usage example
