@@ -18,7 +18,7 @@ usage() {
     echo -e "${GREEN}Commands:${NC}"
     echo "  start                  Start MLflow tracking server"
     echo "  stop                   Stop all containers"
-    echo "  create <py_version>    Create a new dev container (37, 38, 39, 310, 311, 312)"
+    echo "  create <py_version>    Create a new dev container (39, 310, 311, 312)"
     echo "  list                   List all containers"
     echo "  attach <container>     Attach to a running container"
     echo "  destroy                Remove all containers and volumes"
@@ -40,8 +40,8 @@ stop_containers() {
 # Create a development container
 create_dev_env() {
     local python_version=$1
-    if [[ ! $python_version =~ ^(37|38|39|310|311|312)$ ]]; then
-        echo -e "${YELLOW}Invalid Python version. Use 37, 38, 39, 310, 311, or 312.${NC}"
+    if [[ ! $python_version =~ ^(39|310|311|312)$ ]]; then
+        echo -e "${YELLOW}Invalid Python version. Use 39, 310, 311, or 312.${NC}"
         exit 1
     fi
 
