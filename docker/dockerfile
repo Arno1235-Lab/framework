@@ -46,10 +46,10 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && rm get-pip.py
 
 # Set working directory
-WORKDIR /default_workspace
+WORKDIR /workspace
 
 # Copy requirements and install
-COPY requirements.txt /default_workspace/requirements.txt
+COPY requirements.txt /workspace/requirements.txt
 RUN python${PYTHON_VERSION%.*} -m pip install --no-cache-dir -r requirements.txt
 
 # Keep container running
