@@ -1,0 +1,53 @@
+
+x-base-ml-dev: &base-ml-dev
+  runtime: nvidia
+  environment:
+    - NVIDIA_VISIBLE_DEVICES=all
+    - MLFLOW_TRACKING_URI=http://mlflow:5000
+    - CUDA_HOME=/usr/local/cuda
+    - PATH=/usr/local/cuda/bin:$PATH
+    - LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+  volumes:
+    - ./workspace:/workspace
+    - ${HOME}/.ssh:/root/.ssh:ro
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: mlflow_tracking
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db
+      - MLFLOW_ARTIFACTS_DESTINATION=/mlflow/artifacts
+    volumes:
+      - ./mlflow/data:/mlflow
+      - ./mlflow/logs:/logs
+    command:
+      - mlflow
+      - server
+      - --backend-store-uri=sqlite:///mlflow.db
+      - --default-artifact-root=/mlflow/artifacts
+      - --host=0.0.0.0
+    restart: always
+
+  # Python 3.9 ML Development Container
+  ml_dev_py39:
+    <<: *base-ml-dev
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.py39
+      args:
+        - PYTHON_VERSION=3.9.18
+    container_name: ml_dev_py39
+    image: ml_dev_py39
+
+volumes:
+  mlflow_data:

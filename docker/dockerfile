@@ -1,0 +1,57 @@
+# Dockerfile for Python Development with CUDA 12.6.85
+ARG PYTHON_VERSION=3.9.18
+FROM nvidia/cuda:12.6.2-base-ubuntu24.04
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV CUDA_HOME=/usr/local/cuda
+ENV PATH=/usr/local/cuda/bin:$PATH
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    wget \
+    curl \
+    vim \
+    build-essential \
+    zlib1g-dev \
+    libncurses5-dev \
+    libgdbm-dev \
+    libnss3-dev \
+    libssl-dev \
+    libreadline-dev \
+    libffi-dev \
+    libbz2-dev \
+    libsqlite3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install Python
+ARG PYTHON_VERSION
+RUN cd /tmp \
+    && wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz \
+    && tar xzf Python-${PYTHON_VERSION}.tgz \
+    && cd Python-${PYTHON_VERSION} \
+    && ./configure --enable-optimizations \
+    && make -j $(nproc) \
+    && make altinstall \
+    && cd / \
+    && rm -rf /tmp/Python-${PYTHON_VERSION}*
+
+# Ensure pip is installed for the specific Python version
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && python${PYTHON_VERSION%.*} get-pip.py \
+    && rm get-pip.py
+
+# Set working directory
+WORKDIR /workspace
+
+# Copy requirements and install
+COPY requirements/requirements_py3_${PYTHON_VERSION%.*}.txt /workspace/requirements.txt
+RUN python${PYTHON_VERSION%.*} -m pip install --no-cache-dir -r requirements.txt
+
+# Keep container running
+#CMD ["bash"]
+CMD ["tail", "-f", "/dev/null"]
