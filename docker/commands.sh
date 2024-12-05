@@ -40,12 +40,13 @@ stop_containers() {
 # Create a development container
 create_dev_env() {
     local python_version=$1
+    local workspace_location=$2
     if [[ ! $python_version =~ ^(39|310|311|312)$ ]]; then
         echo -e "${YELLOW}Invalid Python version. Use 39, 310, 311, or 312.${NC}"
         exit 1
     fi
 
-    echo -e "${GREEN}Creating Python $python_version development container...${NC}"
+    echo -e "${GREEN}Creating Python $python_version development container with $workspace_location...${NC}"
     docker compose up -d ml_dev_py
 }
 
@@ -88,7 +89,7 @@ case "$1" in
         stop_containers
         ;;
     create)
-        create_dev_env $2
+        create_dev_env $2 $3
         ;;
     list)
         list_containers
