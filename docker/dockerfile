@@ -52,9 +52,6 @@ WORKDIR /workspace
 COPY requirements.txt /workspace/requirements.txt
 RUN python${PYTHON_VERSION%.*} -m pip install --no-cache-dir -r requirements.txt
 
-# Create python alias
-RUN alias python=python${PYTHON_VERSION%.*}
-
 # Keep container running
 #CMD ["bash"]
 CMD ["tail", "-f", "/dev/null"]
