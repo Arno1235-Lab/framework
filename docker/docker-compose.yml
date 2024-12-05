@@ -46,7 +46,7 @@ services:
       context: .
       dockerfile: dockerfile
       args:
-        - PYTHON_VERSION=${PYTHON_VERSION:-3}
+        - PYTHON_VERSION=3.9.18
     container_name: ml_dev_py
     image: ml_dev_py
 
