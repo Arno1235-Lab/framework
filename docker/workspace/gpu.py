@@ -9,7 +9,7 @@ try:
         for i in range(torch.cuda.device_count()):
             print(f'device name: {torch.cuda.get_device_name(i)}')
 except:
-    print("Torch is not installed")
+    print("pytorch is not installed")
 
 print('---')
 print("tensorflow")
@@ -19,7 +19,7 @@ try:
     print(tf.test.is_gpu_available())
     print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 except:
-    print("Tensorflow is not installed")
+    print("tensorflow is not installed")
 
 print('---')
 print('tinygrad')
@@ -34,6 +34,6 @@ try:
         print("CUDA is not available:", e)
 
 except:
-    print("Tinygrad is not installed")
+    print("tinygrad is not installed")
 
 print('---')
