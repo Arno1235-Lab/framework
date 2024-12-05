@@ -43,7 +43,7 @@ services:
       dockerfile: dockerfile
       args:
         - PYTHON_VERSION=${PYTHON_VERSION}
-    command: alias python=${PYTHON_VERSION%.*}
+    command: alias python=python${PYTHON_VERSION%.*}
     container_name: ml_dev_py
     image: ml_dev_py
 
