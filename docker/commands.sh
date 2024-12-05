@@ -16,12 +16,12 @@ usage() {
     echo "$0 {start|stop|create|list|attach|destroy} [options]"
     echo
     echo -e "${GREEN}Commands:${NC}"
-    echo "  start                  Start MLflow tracking server"
-    echo "  stop                   Stop all containers"
-    echo "  create <py_version>    Create a new dev container (39, 310, 311, 312)"
-    echo "  list                   List all containers"
-    echo "  attach <container>     Attach to a running container"
-    echo "  destroy                Remove all containers and volumes"
+    echo "  start                                   Start MLflow tracking server"
+    echo "  stop                                    Stop all containers"
+    echo "  create <py_version> <workspace_path>    Create a new dev container (39, 310, 311, 312)"
+    echo "  list                                    List all containers"
+    echo "  attach <container>                      Attach to a running container"
+    echo "  destroy                                 Remove all containers and volumes"
     exit 1
 }
 
@@ -40,14 +40,16 @@ stop_containers() {
 # Create a development container
 create_dev_env() {
     local python_version=$1
-    local workspace_location=$2
+    local workspace_path=$2
     if [[ ! $python_version =~ ^(39|310|311|312)$ ]]; then
         echo -e "${YELLOW}Invalid Python version. Use 39, 310, 311, or 312.${NC}"
         exit 1
     fi
 
-    echo -e "${GREEN}Creating Python $python_version development container with $workspace_location...${NC}"
-    docker compose up -d ml_dev_py
+    echo -e "${GREEN}Creating Python $python_version development container"
+    echo -e "with $workspace_path as attached workspace...${NC}"
+
+    WORKSPACE_PATH=$workspace_path docker compose up -d ml_dev_py
 }
 
 # List running containers
