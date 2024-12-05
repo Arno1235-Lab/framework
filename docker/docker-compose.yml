@@ -1,3 +1,23 @@
+x-base-ml-dev: &base-ml-dev
+  runtime: nvidia
+  environment:
+    - NVIDIA_VISIBLE_DEVICES=all
+    - MLFLOW_TRACKING_URI=http://mlflow:5000
+    - CUDA_HOME=/usr/local/cuda
+    - PATH=/usr/local/cuda/bin:$PATH
+    - LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+  volumes:
+    - ${WORKSPACE_PATH:-./workspace}:/workspace
+    - ./workspace:/workspace/default
+    - ${HOME}/.ssh:/root/.ssh:ro
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+
 services:
   mlflow:
     image: ghcr.io/mlflow/mlflow:latest
@@ -20,24 +40,7 @@ services:
 
   # Python ML Development Container
   ml_dev_py:
-    runtime: nvidia
-    environment:
-        - NVIDIA_VISIBLE_DEVICES=all
-        - MLFLOW_TRACKING_URI=http://mlflow:5000
-        - CUDA_HOME=/usr/local/cuda
-        - PATH=/usr/local/cuda/bin:$PATH
-        - LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
-    volumes:
-        - ${WORKSPACE_PATH:-./workspace}:/workspace
-        - ./workspace:/workspace/default
-        - ${HOME}/.ssh:/root/.ssh:ro
-    deploy:
-        resources:
-        reservations:
-            devices:
-            - driver: nvidia
-                count: all
-                capabilities: [gpu]
+    <<: *base-ml-dev
     build:
       context: .
       dockerfile: dockerfile
