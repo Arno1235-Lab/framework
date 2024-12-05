@@ -6,6 +6,7 @@ x-base-ml-dev: &base-ml-dev
     - CUDA_HOME=/usr/local/cuda
     - PATH=/usr/local/cuda/bin:$PATH
     - LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+
   volumes:
     - ${WORKSPACE_PATH:-./workspace}:/workspace
     - ./workspace:/workspace/default
@@ -45,7 +46,7 @@ services:
       context: .
       dockerfile: dockerfile
       args:
-        - PYTHON_VERSION=${PYTHON_VERSION}
+        - PYTHON_VERSION=${PYTHON_VERSION:-3}
     container_name: ml_dev_py
     image: ml_dev_py
 
