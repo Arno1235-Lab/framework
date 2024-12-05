@@ -26,9 +26,9 @@ services:
         - MLFLOW_TRACKING_URI=http://mlflow:5000
         - CUDA_HOME=/usr/local/cuda
         - PATH=/usr/local/cuda/bin:$PATH
-        - LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+        - LD_LIBRARY_PATH=/usr/local/cuda/lib64:${LD_LIBRARY_PATH}
     volumes:
-        - ${WORKSPACE_PATH}:/workspace
+        - ${WORKSPACE_PATH:-./workspace}:/workspace
         - ./workspace:/workspace/default
         - ${HOME}/.ssh:/root/.ssh:ro
     deploy:
