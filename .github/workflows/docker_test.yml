@@ -20,7 +20,7 @@ jobs:
     - name: Build Docker Compose Services
       run: |
         cd docker
-        docker-compose build
+        docker compose build
     
     - name: Check Python Versions in Containers
       run: |
