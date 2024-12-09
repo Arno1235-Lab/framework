@@ -82,3 +82,9 @@ jobs:
     #       echo "Some container tests failed"
     #       exit 1
     #     fi
+
+    - name: Cleanup Docker Resources
+      if: always()
+      run: |
+        docker system prune -af
+        docker volume prune -f
