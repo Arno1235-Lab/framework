@@ -1,0 +1,71 @@
+name: docker test
+
+on:
+  push:
+    branches: [ main, staging ]
+  pull_request:
+    branches: [ main, staging ]
+
+jobs:
+  test-docker-containers:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build Docker Compose Services
+      run: |
+        docker-compose build
+    
+    - name: Check Python Versions in Containers
+      run: |
+        # Array of container names to test
+        containers=("ml_dev_py39" "ml_dev_py310" "ml_dev_py311" "ml_dev_py312")
+        
+        # Flag to track if any tests fail
+        tests_failed=0
+        
+        # Test each container
+        for container in "${containers[@]}"; do
+          echo "Testing container: $container"
+          
+          # Run python --version inside the container
+          version_output=$(docker run --rm ml_dev_py39 python --version)
+          
+          # Extract Python version
+          python_version=$(echo "$version_output" | grep -oP 'Python \K[\d.]+')
+          
+          # Check if the version matches the container name
+          case "$container" in
+            ml_dev_py39)
+              expected_version="3.9.20"
+              ;;
+            ml_dev_py310)
+              expected_version="3.10.15"
+              ;;
+            ml_dev_py311)
+              expected_version="3.11.10"
+              ;;
+            ml_dev_py312)
+              expected_version="3.12.6"
+              ;;
+          esac
+          
+          # Compare versions
+          if [[ "$python_version" == "$expected_version" ]]; then
+            echo "✓ $container: Python version $python_version matches expected version"
+          else
+            echo "✗ $container: Unexpected Python version. Expected $expected_version, got $python_version"
+            tests_failed=1
+          fi
+        done
+        
+        # Exit with appropriate status
+        if [[ $tests_failed -ne 0 ]]; then
+          echo "Some container tests failed"
+          exit 1
+        fi
