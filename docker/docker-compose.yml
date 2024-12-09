@@ -39,16 +39,47 @@ services:
       - --host=0.0.0.0
     restart: always
 
-  # Python ML Development Container
-  ml_dev_py:
+  # Python ML Development Containers
+
+  ml_dev_py39:
     <<: *base-ml-dev
     build:
       context: .
       dockerfile: dockerfile
       args:
-        - PYTHON_VERSION=${PYTHON_VERSION:-3.9.18}
-    container_name: ml_dev_py
-    image: ml_dev_py
+        - PYTHON_VERSION=3.9.20
+    container_name: ml_dev_py39
+    image: ml_dev_py39
+
+  ml_dev_py310:
+    <<: *base-ml-dev
+    build:
+      context: .
+      dockerfile: dockerfile
+      args:
+        - PYTHON_VERSION=3.10.15
+    container_name: ml_dev_py310
+    image: ml_dev_py310
+
+  ml_dev_py311:
+    <<: *base-ml-dev
+    build:
+      context: .
+      dockerfile: dockerfile
+      args:
+        - PYTHON_VERSION=3.11.10
+    container_name: ml_dev_py311
+    image: ml_dev_py311
+
+  ml_dev_py312:
+    <<: *base-ml-dev
+    build:
+      context: .
+      dockerfile: dockerfile
+      args:
+        - PYTHON_VERSION=3.12.6
+    container_name: ml_dev_py312
+    image: ml_dev_py312
 
 volumes:
   mlflow_data:

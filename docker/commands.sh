@@ -37,16 +37,6 @@ stop_containers() {
     docker compose down
 }
 
-convert_python_version() {
-    case $1 in
-        39) echo "3.9.18" ;;
-        310) echo "3.10.13" ;;
-        311) echo "3.11.7" ;;
-        312) echo "3.12.1" ;;
-        *) echo "Unknown version" ;;
-    esac
-}
-
 # Create a development container
 create_dev_env() {
     local python_version=$1
@@ -59,9 +49,7 @@ create_dev_env() {
     echo -e "${GREEN}Creating Python $python_version development container"
     echo -e "with $workspace_path as attached workspace...${NC}"
 
-    python_version=$(convert_python_version $python_version)
-
-    WORKSPACE_PATH=$workspace_path PYTHON_VERSION=$python_version docker compose up -d ml_dev_py
+    WORKSPACE_PATH=$workspace_path docker compose up -d ml_dev_py$python_version
 }
 
 # List running containers
