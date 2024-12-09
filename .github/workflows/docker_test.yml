@@ -31,8 +31,7 @@ jobs:
     - name: Build Docker Compose Services
       run: |
         cd docker
-        docker system prune -af
-        docker compose build --parallel 2
+        docker compose build
     
     # - name: Check Python Versions in Containers
     #   run: |
