@@ -11,6 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - name: Free Disk Space
+      uses: jlumbroso/free-disk-space@v1.3.1
+      with:
+        # This removes Android SDK, Google Cloud SDK, and other large tools
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        docker-images: true
+        swap-storage: true
+
     - name: Checkout code
       uses: actions/checkout@v4
     
@@ -20,7 +31,8 @@ jobs:
     - name: Build Docker Compose Services
       run: |
         cd docker
-        docker compose build
+        docker system prune -af
+        docker compose build --parallel 2
     
     # - name: Check Python Versions in Containers
     #   run: |
