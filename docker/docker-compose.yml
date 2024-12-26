@@ -1,0 +1,85 @@
+x-base-ml-dev: &base-ml-dev
+  runtime: nvidia
+  environment:
+    - NVIDIA_VISIBLE_DEVICES=all
+    - MLFLOW_TRACKING_URI=http://mlflow:5000
+    - CUDA_HOME=/usr/local/cuda
+    - PATH=/usr/local/cuda/bin:$PATH
+    - LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+
+  volumes:
+    - ${WORKSPACE_PATH:-./workspace}:/workspace
+    - ./workspace:/workspace/default
+    - ${HOME}/.ssh:/root/.ssh:ro
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: mlflow_tracking
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db
+      - MLFLOW_ARTIFACTS_DESTINATION=/mlflow/artifacts
+    volumes:
+      - ./mlflow/data:/mlflow
+      - ./mlflow/logs:/logs
+    command:
+      - mlflow
+      - server
+      - --backend-store-uri=sqlite:///mlflow.db
+      - --default-artifact-root=/mlflow/artifacts
+      - --host=0.0.0.0
+    restart: always
+
+  # Python ML Development Containers
+
+  ml_dev_py39:
+    <<: *base-ml-dev
+    build:
+      context: .
+      dockerfile: dockerfile
+      args:
+        - PYTHON_VERSION=3.9.20
+    container_name: ml_dev_py39
+    image: ml_dev_py39
+
+  # ml_dev_py310:
+  #   <<: *base-ml-dev
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile
+  #     args:
+  #       - PYTHON_VERSION=3.10.15
+  #   container_name: ml_dev_py310
+  #   image: ml_dev_py310
+
+  # ml_dev_py311:
+  #   <<: *base-ml-dev
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile
+  #     args:
+  #       - PYTHON_VERSION=3.11.10
+  #   container_name: ml_dev_py311
+  #   image: ml_dev_py311
+
+  # ml_dev_py312:
+  #   <<: *base-ml-dev
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile
+  #     args:
+  #       - PYTHON_VERSION=3.12.6
+  #   container_name: ml_dev_py312
+  #   image: ml_dev_py312
+
+volumes:
+  mlflow_data:
