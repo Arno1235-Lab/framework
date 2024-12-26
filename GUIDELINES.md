@@ -24,14 +24,14 @@ pytest
 INDEX-TASK-TARGET
 
 Possible tasks:
-- Object Detection: OD
-- Image Classification: IC
-- Text Generation: TG
-- Image Segmentation: IS
-- Anomaly Detection: AD
-- Object Character Recognition: OCR
-- Point Cloud Generation: PCG
-- Image Generation: IG
+- Object Detection: **OD**
+- Image Classification: **IC**
+- Text Generation: **TG**
+- Image Segmentation: **IS**
+- Anomaly Detection: **AD**
+- Object Character Recognition: **OCR**
+- Point Cloud Generation: **PCG**
+- Image Generation: **IG**
 
 Examples:
 - 001-OCR-ColruytTickets
