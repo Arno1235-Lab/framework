@@ -26,7 +26,7 @@ INDEX-TASK-TARGET
 Possible tasks:
 
 | Abbreviation | Description |
-|--------------|:-----------:|
+|--------------|-----------|
 | OD           | Object Detection |
 | IC           | Image Classification |
 | TG           | Text Generation |
